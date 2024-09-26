@@ -10,7 +10,7 @@ class Companies:
         self.link = link
         self.pages = pages
         self.companies = list()
-        self.domain = re.search(pattern=r".*(\.ru|\.com)", string=link[8:])
+        self.domain = re.search(pattern=r".*(\.ru|\.com)", string=link[8:]).group(0)
         
 
         self.get_html()
@@ -37,9 +37,19 @@ class Companies:
             for k in h3_list:
                 self.companies.append("https://steel-fabrication.ru" + k.find("a")["href"])
 
-            self.link = self.link[0:-1] + str(i)
+            self.link = self.link.replace(re.search(pattern=r"\d$", string=self.link).group(0), str(i))
             self.get_html()
-            
+
+    def get_metalweb(self):
+        for i in range(2, self.pages + 2):
+            infinite_scroll = self.soup.find("article", class_="col-xs-12").find("div", class_="infinite-scroll")
+            div_list = infinite_scroll.find_all("div", class_="pull-left")
+
+            for k in div_list:
+                self.companies.append(k.find("h3").find("a")["href"])
+        
+            self.link = self.link.replace(re.search(pattern=r"page.*", string=self.link).group(0), f"page{i}.html")
+            self.get_html()
 
 
 
@@ -53,5 +63,7 @@ class Companies:
 
 
 
-# c = Companies("https://steel-fabrication.ru/?arrFilter2_ff%5BNAME%5D=&arrFilter2_pf%5BLOCATION%5D%5B0%5D=195&arrFilter2_pf%5BLOCATION%5D%5B1%5D=191&arrFilter2_pf%5BLOCATION%5D%5B2%5D=194&arrFilter2_pf%5BLOCATION%5D%5B3%5D=193&set_filter=Y&PAGEN_6=1", pages=10)
-# c.get_steel_fabrication()
+
+
+# c = Companies("https://www.metalweb.ru/catalog7/okrug1058/region291/", pages=28)
+# c.get_metalweb()
