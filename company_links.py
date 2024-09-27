@@ -6,18 +6,21 @@ from typing import Union
 
 class Companies:
 
-    def __init__(self, link: str, pages: int) -> None:
+    def __init__(self, link: str, pages: int, cookie: str = None) -> None:
         self.link = link
         self.pages = pages
+        self.cookie = cookie
         self.companies = list()
         self.domain = re.search(pattern=r".*(\.ru|\.com)", string=link[8:]).group(0)
         
-
         self.get_html()
     
     def get_html(self) -> Union[None | str]:
+        if self.cookie != None:
+            response = requests.get(url=self.link, headers={"cookie": self.cookie})   
+        else:
+            response = requests.get(url=self.link)
 
-        response = requests.get(url=self.link)
         code = response.status_code
 
         if code >= 200 and code < 400:
@@ -26,21 +29,21 @@ class Companies:
             
             with open("index.html", "r", encoding="utf-8") as file:
                 self.soup = BeautifulSoup("".join(file.readlines()), "html.parser")
-
         else:
-            return "error"
+            self.soup = "error"
     
-    def get_steel_fabrication(self):
+    def get_steel_fabrication(self) -> None:
         for i in range(2, self.pages + 2):
             h3_list = self.soup.find("div", class_="catalog-list").find_all("h3")
 
             for k in h3_list:
                 self.companies.append("https://steel-fabrication.ru" + k.find("a")["href"])
 
-            self.link = self.link.replace(re.search(pattern=r"\d$", string=self.link).group(0), str(i))
+            self.link = self.link.replace(re.search(pattern=r"PAGEN_6=\d+$", string=self.link).group(0), f"PAGEN_6={i}")
+
             self.get_html()
 
-    def get_metalweb(self):
+    def get_metalweb(self) -> None:
         for i in range(2, self.pages + 2):
             infinite_scroll = self.soup.find("article", class_="col-xs-12").find("div", class_="infinite-scroll")
             div_list = infinite_scroll.find_all("div", class_="pull-left")
@@ -50,6 +53,21 @@ class Companies:
         
             self.link = self.link.replace(re.search(pattern=r"page.*", string=self.link).group(0), f"page{i}.html")
             self.get_html()
+    
+    def get_fabricators(self) -> None:
+        for i in range(1, self.pages + 2):
+            content_list_div = self.soup.find("div", class_="content-list--padding")
+            div_enterprise = content_list_div.find_all("div", class_="enterprise-teaser")
+
+            for k in div_enterprise:
+                self.companies.append("https://fabricators.ru" + k.find("a")["href"])
+            
+            if i == 1:
+                self.link += "?ysclid=m1kjzaqwyj637159448&page=1"
+            else:
+                self.link = self.link.replace(re.search(pattern=r"page=\d+$", string=self.link).group(0), f"page={i}")
+
+            self.get_html()
 
 
 
@@ -65,5 +83,7 @@ class Companies:
 
 
 
-# c = Companies("https://www.metalweb.ru/catalog7/okrug1058/region291/", pages=28)
-# c.get_metalweb()
+
+
+# c = Companies("https://fabricators.ru/proizvodstvo/zavody-metallokonstrukciy", pages=119, cookie="_ym_uid=17273380524345500; _ym_d=1727338052; beget=begetok;")
+# c.get_fabricators()
