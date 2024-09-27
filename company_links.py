@@ -80,6 +80,19 @@ class Companies:
             
             self.link = self.link.replace(re.search(pattern=r"PAGEN_1=\d+$", string=self.link).group(0), f"PAGEN_1={i}")
             self.get_html()
+    
+    def get_manufacturers(self) -> None:
+        for i in range(1, self.pages + 2):
+            sim_titles = self.soup.find("div", class_="companies-list").find_all("div", class_="sim-title")
+
+            for k in sim_titles:
+                self.companies.append("https://manufacturers.ru/" + k.find("a")["href"])
+            
+            if i == 1:
+                self.link += "?page=1"
+            else:
+                self.link = self.link.replace(re.search(pattern=r"page=\d+$", string=self.link).group(0), f"page={i}") 
+            self.get_html()
 
 
 
@@ -96,5 +109,5 @@ class Companies:
 
 
 
-# c = Companies("https://www.oborudunion.ru/company/metalloobrabatyvayuschee-oborudovanie?PAGEN_1=1", pages=111, cookie="_ym_uid=1727160878853987332; _ym_d=1727160878; _ym_isad=1; _ym_visorc=w;")
-# c.get_oborudunion()
+# c = Companies("https://manufacturers.ru/companies/proizvodstvo-metallokonstrukciy", pages=34, cookie="beget=begetok; _ym_uid=1727343216296996738; _ym_d=1727343216; _ym_isad=1; _ym_visorc=w")
+# c.get_manufacturers()
