@@ -94,6 +94,28 @@ class Companies:
                 self.link = self.link.replace(re.search(pattern=r"page=\d+$", string=self.link).group(0), f"page={i}") 
             self.get_html()
 
+    def get_orgpage(self) -> None:
+        for i in range(1, self.pages + 2):
+            item_titles = self.soup.find("div", id="rubricator-result").find_all("div", class_="similar-item__title")
+
+            for k in item_titles:
+                self.companies.append(k.find("a")["href"])
+            
+            if i == 1:
+                self.link += "2/"
+            else:
+                self.link = self.link.replace(re.search(pattern=r"\d+\/$", string=self.link).group(0), f"{i}/") 
+            self.get_html()
+    
+    def get_checko(self) -> None:
+        for i in range(2, self.pages + 2):
+            links = self.soup.find("table", class_="data-table").find_all("a", class_="link")
+
+            for k in links:
+                self.companies.append("https://checko.ru" + k["href"])
+        
+            self.link = self.link.replace(re.search(pattern=r"page=\d+$", string=self.link).group(0), f"page={i}")
+            self.get_html()
 
 
 
@@ -109,5 +131,7 @@ class Companies:
 
 
 
-# c = Companies("https://manufacturers.ru/companies/proizvodstvo-metallokonstrukciy", pages=34, cookie="beget=begetok; _ym_uid=1727343216296996738; _ym_d=1727343216; _ym_isad=1; _ym_visorc=w")
-# c.get_manufacturers()
+
+c = Companies(link="https://checko.ru/company/select?code=422230&page=1", pages=3)
+c.get_checko()
+print(len(c.companies))

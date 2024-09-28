@@ -8,10 +8,10 @@
 	],
 
 	"topic_two": [
-		"https://fabricators.ru/produkt/transformatorypodstancii?page=1",
-		"https://www.oborudunion.ru/company/energeticheskoe-oborudovanie/",
+		"https://fabricators.ru/produkt/transformatorypodstancii",
+		"https://www.oborudunion.ru/company/energeticheskoe-oborudovanie?PAGEN_1=1",
 		"https://www.orgpage.ru/rossiya/elektroenergetika0/",
-		"https://checko.ru/company/select?code=422230"
+		"https://checko.ru/company/select?code=422230&page=1"
 	],
 
 	"topic_three": [
