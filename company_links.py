@@ -130,7 +130,18 @@ class Companies:
                 self.link = self.link.replace(re.search(pattern=r"page=\d+$", string=self.link).group(0), f"page={i}")
             self.get_html()
 
+    def get_wiki_prom(self) -> None:
+        for i in range(2, self.pages + 2):
+            titles = self.soup.find("div", class_="list-block").find_all("div", class_="title")
 
+            for k in titles:
+                self.companies.append(k.find("a")["href"])
+            
+            if i == 2:
+                self.link = self.link[0:28] + "/page2/" + "mashinostroitelnye-zavody.html"
+            else:
+                self.link = self.link.replace(re.search(pattern=r"page\d+", string=self.link).group(0), f"page{i}")
+            self.get_html()
 
 
 
@@ -145,6 +156,6 @@ class Companies:
 
 # dict_ = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"}
 
-# c = Companies(link="https://kemcsm.ru/factories/mashinostroitelnye-zavody", pages=14, headers=dict_)
-# c.get_kemcsm()
+# c = Companies(link="https://www.wiki-prom.ru/169/mashinostroitelnye-zavody.html", pages=3)
+# c.get_wiki_prom()
 # print(c.companies)
