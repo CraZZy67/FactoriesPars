@@ -2,8 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 
 import re
+from time import sleep
 
-class Companies:
+class Site:
 
     def __init__(self, link: str, pages: int, headers: dict = None) -> None:
         self._link = link
@@ -39,7 +40,8 @@ class Companies:
                 for k in h3_list:
                     self._companies.append("https://steel-fabrication.ru" + k.find("a")["href"])
 
-            self._link = self._link.replace(re.search(pattern=r"PAGEN_6=\d+$", string=self._link).group(0), f"PAGEN_6={i}")
+            self._link = self._link.replace(re.search(pattern=r"PAGEN_6=\d+$",
+                                                      string=self._link).group(0), f"PAGEN_6={i}")
             self._get_html()
 
     def _get_metalweb(self) -> None:
@@ -51,7 +53,8 @@ class Companies:
                 for k in div_list:
                     self._companies.append(k.find("h3").find("a")["href"])
             
-            self._link = self._link.replace(re.search(pattern=r"page.*", string=self._link).group(0), f"page{i}.html")
+            self._link = self._link.replace(re.search(pattern=r"page.*",
+                                                      string=self._link).group(0), f"page{i}.html")
             self._get_html()
         
     def _get_fabricators(self) -> None:
@@ -66,8 +69,10 @@ class Companies:
             if i == 1:
                 self._link += "?ysclid=m1kjzaqwyj637159448&page=1"
             else:
-                self._link = self._link.replace(re.search(pattern=r"page=\d+$", string=self._link).group(0), f"page={i}")
+                self._link = self._link.replace(re.search(pattern=r"page=\d+$",
+                                                          string=self._link).group(0), f"page={i}")
             self._get_html()
+            sleep(0.2)
             
     
     def _get_oborudunion(self) -> None:
@@ -80,8 +85,10 @@ class Companies:
                         continue
                     self._companies.append("https://www.oborudunion.ru" + k.find("a")["href"])
                 
-            self._link = self._link.replace(re.search(pattern=r"PAGEN_1=\d+$", string=self._link).group(0), f"PAGEN_1={i}")
+            self._link = self._link.replace(re.search(pattern=r"PAGEN_1=\d+$",
+                                                      string=self._link).group(0), f"PAGEN_1={i}")
             self._get_html()
+            sleep(0.2)
     
     def _get_manufacturers(self) -> None:
         for i in range(1, self._pages + 2):
@@ -94,8 +101,10 @@ class Companies:
             if i == 1:
                 self._link += "?page=1"
             else:
-                self._link = self._link.replace(re.search(pattern=r"page=\d+$", string=self._link).group(0), f"page={i}") 
+                self._link = self._link.replace(re.search(pattern=r"page=\d+$",
+                                                          string=self._link).group(0), f"page={i}") 
             self._get_html()
+            sleep(0.2)
 
     def _get_orgpage(self) -> None:
         for i in range(1, self._pages + 2):
@@ -108,7 +117,8 @@ class Companies:
             if i == 1:
                 self._link += "2/"
             else:
-                self._link = self._link.replace(re.search(pattern=r"\d+\/$", string=self._link).group(0), f"{i}/") 
+                self._link = self._link.replace(re.search(pattern=r"\d+\/$",
+                                                          string=self._link).group(0), f"{i}/") 
             self._get_html()
             
     def _get_checko(self) -> None:
@@ -119,7 +129,8 @@ class Companies:
             for k in links:
                 self._companies.append("https://checko.ru" + k["href"])
         
-            self._link = self._link.replace(re.search(pattern=r"page=\d+$", string=self._link).group(0), f"page={i}")
+            self._link = self._link.replace(re.search(pattern=r"page=\d+$",
+                                                      string=self._link).group(0), f"page={i}")
             self._get_html()
     
     def _get_kemcsm(self)-> None:
@@ -133,7 +144,8 @@ class Companies:
             if i == 1:
                 self._link += "?page=1"
             else:
-                self._link = self._link.replace(re.search(pattern=r"page=\d+$", string=self._link).group(0), f"page={i}")
+                self._link = self._link.replace(re.search(pattern=r"page=\d+$",
+                                                          string=self._link).group(0), f"page={i}")
             self._get_html()
 
     def _get_wiki_prom(self) -> None:
@@ -147,7 +159,8 @@ class Companies:
             if i == 2:
                 self._link = self._link[0:28] + "/page2/" + "mashinostroitelnye-zavody.html"
             else:
-                self._link = self._link.replace(re.search(pattern=r"page\d+", string=self._link).group(0), f"page{i}")
+                self._link = self._link.replace(re.search(pattern=r"page\d+",
+                                                          string=self._link).group(0), f"page{i}")
             self._get_html()
 
     def get_companies(self) -> list:
@@ -165,18 +178,4 @@ class Companies:
         
         PATHS[self._domain]()
         return self._companies
-
-
-
-
-
-
-
-
-
-
-
-# dict_ = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"}
-
-c = Companies(link="https://www.wiki-prom.ru/169/mashinostroitelnye-zavody.html", pages=3)
-print(c.get_companies())
+    
