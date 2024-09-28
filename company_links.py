@@ -6,18 +6,18 @@ from typing import Union
 
 class Companies:
 
-    def __init__(self, link: str, pages: int, cookie: str = None) -> None:
+    def __init__(self, link: str, pages: int, headers: dict = None) -> None:
         self.link = link
         self.pages = pages
-        self.cookie = cookie
+        self.headers = headers
         self.companies = list()
         self.domain = re.search(pattern=r".*(\.ru|\.com)", string=link[8:]).group(0)
         
         self.get_html()
     
     def get_html(self) -> Union[None | str]:
-        if self.cookie != None:
-            response = requests.get(url=self.link, headers={"cookie": self.cookie})   
+        if self.headers != None:
+            response = requests.get(url=self.link, headers=self.headers)   
         else:
             response = requests.get(url=self.link)
 
@@ -116,6 +116,19 @@ class Companies:
         
             self.link = self.link.replace(re.search(pattern=r"page=\d+$", string=self.link).group(0), f"page={i}")
             self.get_html()
+    
+    def get_kemcsm(self):
+        for i in range(1, self.pages + 2):
+            factory_heads = self.soup.find("div", class_="factory-wrap").find_all("div", class_="factory__head")
+
+            for k in factory_heads:
+                self.companies.append("https://kemcsm.ru" + k.find("a")["href"])
+            
+            if i == 1:
+                self.link += "?page=1"
+            else:
+                self.link = self.link.replace(re.search(pattern=r"page=\d+$", string=self.link).group(0), f"page={i}")
+            self.get_html()
 
 
 
@@ -130,8 +143,8 @@ class Companies:
 
 
 
+# dict_ = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"}
 
-
-c = Companies(link="https://checko.ru/company/select?code=422230&page=1", pages=3)
-c.get_checko()
-print(len(c.companies))
+# c = Companies(link="https://kemcsm.ru/factories/mashinostroitelnye-zavody", pages=14, headers=dict_)
+# c.get_kemcsm()
+# print(c.companies)
