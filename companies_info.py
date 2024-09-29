@@ -41,18 +41,53 @@ class CompaniesInfo(Site):
             site = table.find("a", attrs={"itemprop": "url"})
 
             if phone != None:
-                self.info[i].append(phone["href"])
+                self.info[i].append(phone["href"][4:])
             if site != None:
                 self.info[i].append(site["href"])
             if i > 100:
                 break
-            
+               
+    def _get_fabricators(self) -> None:
+        super()._get_fabricators()
 
-             
-    # def _get_steel_fabrication(self) -> None:
-    #     for i in super()._companies:
-    #         self._link = i
-    #         super()._get_html()
+        for i, k in enumerate(self._companies, start=1):
+            self._link = k
+            super()._get_html()
+
+            self.info[i] = [self.soup.find("h1").text]
+
+            section = self.soup.find("div", id="section-st-block5")
+            contact_list = section.find("div", class_="content-contact-list")
+            a_links = contact_list.find_all("a")
+
+            for v in a_links:
+                if "tel:" in v["href"]:
+                    self.info[i].insert(1, v["href"][4:])
+                elif "http" in v["href"]:
+                    self.info[i].append(v["href"])
+            if i > 750:
+                break
+    
+    def _get_oborudunion(self) -> None:
+        super()._get_oborudunion()
+
+        for i, k in enumerate(self._companies, start=1):
+            self._link = k
+            super()._get_html()
+
+            aside = self.soup.find("aside")
+            self.info[i] = [aside.find("h3").text]
+
+            phone_list = aside.find("ul", class_="c-phone-list")
+            if phone_list != None:
+                self.info[i].append(phone_list.find("a")["href"][4:])
+        
+            site_list = aside.find("ul", class_="c-site-list")
+            if site_list != None:
+                self.info[i].append(site_list.find("a")["href"])
+            if i > 700:
+                break
+            sleep(0.2)
     
     # def _get_steel_fabrication(self) -> None:
     #     for i in super()._companies:
@@ -68,11 +103,6 @@ class CompaniesInfo(Site):
     #     for i in super()._companies:
     #         self._link = i
     #         super()._get_html()
-    
-    # def _get_steel_fabrication(self) -> None:
-    #     for i in super()._companies:
-    #         self._link = i
-    #         super()._get_html()
 
     # def _get_steel_fabrication(self) -> None:
     #     for i in super()._companies:
@@ -85,9 +115,9 @@ class CompaniesInfo(Site):
     #         super()._get_html()
 
 
-
-exam = CompaniesInfo("https://www.metalweb.ru/catalog7/okrug1058/page1.html", pages=28)
-exam._get_metalweb()
+# headers_fabricators = {"cookie": "_ym_uid=17273380524345500; _ym_d=1727338052; beget=begetok; SSESS0cfa4c8e8012789cd8880c3e327e70ba=Vs8iyoD3HvOcmJ4lSSXxd82F0lPba8WWLjwEOd6jubM; _ym_isad=1; _ym_visorc=w"}
+exam = CompaniesInfo("https://www.oborudunion.ru/company/metalloobrabatyvayuschee-oborudovanie?PAGEN_1=1", pages=111)
+exam._get_oborudunion()
 
 for i, k in exam.info.items():
     print(f"{i} - {k}")
