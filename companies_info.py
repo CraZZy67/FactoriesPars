@@ -89,10 +89,25 @@ class CompaniesInfo(Site):
                 break
             sleep(0.2)
     
-    # def _get_steel_fabrication(self) -> None:
-    #     for i in super()._companies:
-    #         self._link = i
-    #         super()._get_html()
+    def _get_manufacturers(self) -> None:
+        super()._get_manufacturers()
+        for i, k in enumerate(self._companies, start=1):
+            self._link = k
+            super()._get_html()
+
+            self.info[i] = [self.soup.find("h1").text]
+
+            cont_body = self.soup.find("tbody", class_="cont-tbody")
+            all_a = cont_body.find_all("a")
+
+            for v in all_a:
+                if "tel:" in v["href"]:
+                    self.info[i].insert(1, v["href"][4:])
+                elif "http" in v["href"]:
+                    self.info[i].append(v["href"])
+            if i > 700:
+                break
+            sleep(0.2)
     
     # def _get_steel_fabrication(self) -> None:
     #     for i in super()._companies:
@@ -115,9 +130,9 @@ class CompaniesInfo(Site):
     #         super()._get_html()
 
 
-# headers_fabricators = {"cookie": "_ym_uid=17273380524345500; _ym_d=1727338052; beget=begetok; SSESS0cfa4c8e8012789cd8880c3e327e70ba=Vs8iyoD3HvOcmJ4lSSXxd82F0lPba8WWLjwEOd6jubM; _ym_isad=1; _ym_visorc=w"}
-exam = CompaniesInfo("https://www.oborudunion.ru/company/metalloobrabatyvayuschee-oborudovanie?PAGEN_1=1", pages=111)
-exam._get_oborudunion()
+headers_manufacturers = {"cookie": "beget=begetok; _ym_uid=1727343216296996738; _ym_d=1727343216; _ym_isad=1; _ym_visorc=w"}
+exam = CompaniesInfo("https://manufacturers.ru/companies/proizvodstvo-metallokonstrukciy", pages=33, headers=headers_manufacturers)
+exam._get_manufacturers()
 
 for i, k in exam.info.items():
     print(f"{i} - {k}")
