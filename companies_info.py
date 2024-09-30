@@ -91,6 +91,7 @@ class CompaniesInfo(Site):
     
     def _get_manufacturers(self) -> None:
         super()._get_manufacturers()
+
         for i, k in enumerate(self._companies, start=1):
             self._link = k
             super()._get_html()
@@ -109,10 +110,27 @@ class CompaniesInfo(Site):
                 break
             sleep(0.2)
     
-    # def _get_steel_fabrication(self) -> None:
-    #     for i in super()._companies:
-    #         self._link = i
-    #         super()._get_html()
+    def _get_orgpage(self) -> None:
+        super()._get_orgpage()
+
+        for i, k in enumerate(self._companies, start=1):
+            self._link = k
+            super()._get_html()
+
+            self.info[i] = [self.soup.find("h1").text.replace(" ", "").replace("\n", "")]
+
+            company_information = self.soup.find("ul", class_="company-information__phone-list")
+            li = company_information.find_all("li")
+            phone = li[0].find("span", class_="company-information__phone")
+            if phone != None:
+                self.info[i].append(phone.text)
+
+            div_inf = self.soup.find("div", class_="company-information__site-text")
+            if div_inf != None:
+                site = div_inf.find("a", class_="nofol-link")
+                if site != None:
+                    self.info[i].append(site["href"])
+
     
     # def _get_steel_fabrication(self) -> None:
     #     for i in super()._companies:
@@ -130,9 +148,9 @@ class CompaniesInfo(Site):
     #         super()._get_html()
 
 
-headers_manufacturers = {"cookie": "beget=begetok; _ym_uid=1727343216296996738; _ym_d=1727343216; _ym_isad=1; _ym_visorc=w"}
-exam = CompaniesInfo("https://manufacturers.ru/companies/proizvodstvo-metallokonstrukciy", pages=33, headers=headers_manufacturers)
-exam._get_manufacturers()
+# headers_manufacturers = {"cookie": "beget=begetok; _ym_uid=1727343216296996738; _ym_d=1727343216; _ym_isad=1; _ym_visorc=w"}
+exam = CompaniesInfo("https://www.orgpage.ru/rossiya/elektroenergetika0/", pages=3)
+exam._get_orgpage()
 
 for i, k in exam.info.items():
     print(f"{i} - {k}")
