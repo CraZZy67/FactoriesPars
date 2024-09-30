@@ -132,10 +132,27 @@ class CompaniesInfo(Site):
                     self.info[i].append(site["href"])
 
     
-    # def _get_steel_fabrication(self) -> None:
-    #     for i in super()._companies:
-    #         self._link = i
-    #         super()._get_html()
+    def _get_checko(self) -> None:
+        super()._get_checko()
+
+        for i, k in enumerate(self._companies, start=1):
+            self._link = k
+            super()._get_html()
+
+            self.info[i] = [self.soup.find("h1").text]
+
+            div = self.soup.find("div", class_="uk-width-1 uk-width-1-3@m")
+            if div != None:
+                all_a = div.find_all("a")
+                if all_a != None and len(all_a) != 0:
+                    self.info[i].append(all_a[0].text)
+            
+            main_div = self.soup.find("div", class_="uk-grid-divider mt-5")
+            if main_div != None:
+                a_link = main_div.find("a", attrs={"rel": "nofollow noopener"})
+                if a_link != None:
+                    self.info[i].append(a_link["href"])
+
 
     # def _get_steel_fabrication(self) -> None:
     #     for i in super()._companies:
@@ -149,8 +166,8 @@ class CompaniesInfo(Site):
 
 
 # headers_manufacturers = {"cookie": "beget=begetok; _ym_uid=1727343216296996738; _ym_d=1727343216; _ym_isad=1; _ym_visorc=w"}
-exam = CompaniesInfo("https://www.orgpage.ru/rossiya/elektroenergetika0/", pages=3)
-exam._get_orgpage()
+exam = CompaniesInfo("https://checko.ru/company/select?code=422230&page=1", pages=3)
+exam._get_checko()
 
 for i, k in exam.info.items():
     print(f"{i} - {k}")
