@@ -154,10 +154,25 @@ class CompaniesInfo(Site):
                     self.info[i].append(a_link["href"])
 
 
-    # def _get_steel_fabrication(self) -> None:
-    #     for i in super()._companies:
-    #         self._link = i
-    #         super()._get_html()
+    def _get_kemcsm(self)-> None:
+        super()._get_kemcsm()
+
+        for i, k in enumerate(self._companies, start=1):
+            self._link = k
+            super()._get_html()
+
+            self.info[i] = [self.soup.find("h1").text]
+
+            contact_company = self.soup.find("div", id="contact-company")
+            all_li = contact_company.find_all("li")
+            phone = all_li[1].find("a")
+            if phone != None:
+                self.info[i].append(phone["href"][4:])
+            
+            site = self.soup.find("a", attrs={"target": "_blank"})
+            if site != None:
+                self.info[i].append(site.text)
+
 
     # def _get_steel_fabrication(self) -> None:
     #     for i in super()._companies:
@@ -165,9 +180,9 @@ class CompaniesInfo(Site):
     #         super()._get_html()
 
 
-# headers_manufacturers = {"cookie": "beget=begetok; _ym_uid=1727343216296996738; _ym_d=1727343216; _ym_isad=1; _ym_visorc=w"}
-exam = CompaniesInfo("https://checko.ru/company/select?code=422230&page=1", pages=3)
-exam._get_checko()
+headers_kemcsm = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"}
+exam = CompaniesInfo("https://kemcsm.ru/factories/mashinostroitelnye-zavody", pages=14, headers=headers_kemcsm)
+exam._get_kemcsm()
 
 for i, k in exam.info.items():
     print(f"{i} - {k}")
