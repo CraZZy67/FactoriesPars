@@ -24,11 +24,7 @@ class Site:
         code = response.status_code
 
         if code >= 200 and code < 400:
-            with open("index.html", "w", encoding="utf-8") as file:
-                file.writelines(response.text)
-            
-            with open("index.html", "r", encoding="utf-8") as file:
-                self.soup = BeautifulSoup("".join(file.readlines()), "html.parser")
+            self.soup = BeautifulSoup(response.text, "html.parser")
         else:
             self.soup = "error"
     
@@ -163,7 +159,7 @@ class Site:
                                                           string=self._link).group(0), f"page{i}")
             self._get_html()
 
-    def get_companies(self) -> list:
+    def get_info(self) -> list:
         PATHS = {
             "steel-fabrication.ru": self._get_steel_fabrication,
             "www.metalweb.ru": self._get_metalweb,

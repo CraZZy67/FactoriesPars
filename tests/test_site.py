@@ -30,112 +30,112 @@ class TestCompanies(unittest.TestCase):
 
     def test_steel(self):
         last_link = "https://steel-fabrication.ru/catalog-manufacturers/catalog/yuzhnouralskiy-yuzmkm/"
-        result = self.ste_fabric_exam.get_companies()
+        result = self.ste_fabric_exam.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
     
     def test_metalweb(self):
         last_link = "https://irkutsk.metalweb.ru/catalog/all/resource1104.html"
-        result = self.metalweb.get_companies()
+        result = self.metalweb.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
     
     def test_orgpage(self):
         last_link = "https://www.orgpage.ru/vyiborg/kaskad-1-442503.html"
-        result = self.orgpage.get_companies()
+        result = self.orgpage.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
     
     def test_checko(self):
         last_link = "https://checko.ru/company/rif-1123926058761"
-        result = self.checko.get_companies()
+        result = self.checko.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
     
     def test_kemcsm(self):
         last_link = "https://kemcsm.ru/factory/midiel"
-        result = self.kemcsm.get_companies()
+        result = self.kemcsm.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
     
     def test_wiki_prom(self):
         last_link = "https://www.wiki-prom.ru/6758zavod.html"
-        result = self.wiki_prom.get_companies()
+        result = self.wiki_prom.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
     
     def test_oborudunion_1(self):
         last_link = "https://www.oborudunion.ru/company/3088974/"
-        result = self.oborudunion_1.get_companies()
+        result = self.oborudunion_1.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
     
     def test_oborudunion_2(self):
         last_link = "https://www.oborudunion.ru/company/2035837/"
-        result = self.oborudunion_2.get_companies()
+        result = self.oborudunion_2.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_oborudunion_3(self):
         last_link = "https://www.oborudunion.ru/company/3091415/"
-        result = self.oborudunion_3.get_companies()
+        result = self.oborudunion_3.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_fabricators_1(self):
         last_link = "https://fabricators.ru/proizvoditel/veyn"
-        result = self.fabricators_1.get_companies()
+        result = self.fabricators_1.get_info()
         
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_fabricators_2(self):
         last_link = "https://fabricators.ru/proizvoditel/chetz"
-        result = self.fabricators_2.get_companies()
+        result = self.fabricators_2.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_fabricators_3(self):
         last_link = "https://fabricators.ru/proizvoditel/ooo-kompaniya-partner"
-        result = self.fabricators_3.get_companies()
+        result = self.fabricators_3.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_manufacturers_1(self):
         last_link = "https://manufacturers.ru//company/asmu-stalkonstrukciya"
-        result = self.manufacturers_1.get_companies()
+        result = self.manufacturers_1.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_manufacturers_2(self):
         last_link = "https://manufacturers.ru//company/zavod-imeni-m-tarasova"
-        result = self.manufacturers_2.get_companies()
+        result = self.manufacturers_2.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_manufacturers_3(self):
         last_link = "https://manufacturers.ru//company/abatek"
-        result = self.manufacturers_3.get_companies()
+        result = self.manufacturers_3.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
 
     def test_manufacturers_4(self):
         last_link = "https://manufacturers.ru//company/liga-proektov"
-        result = self.manufacturers_4.get_companies()
+        result = self.manufacturers_4.get_info()
 
         self.assertIsInstance(list(), type(result))
         self.assertIn(last_link, result)
