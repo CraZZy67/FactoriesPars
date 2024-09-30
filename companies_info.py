@@ -130,8 +130,7 @@ class CompaniesInfo(Site):
                 site = div_inf.find("a", class_="nofol-link")
                 if site != None:
                     self.info[i].append(site["href"])
-
-    
+  
     def _get_checko(self) -> None:
         super()._get_checko()
 
@@ -153,7 +152,6 @@ class CompaniesInfo(Site):
                 if a_link != None:
                     self.info[i].append(a_link["href"])
 
-
     def _get_kemcsm(self)-> None:
         super()._get_kemcsm()
 
@@ -173,16 +171,23 @@ class CompaniesInfo(Site):
             if site != None:
                 self.info[i].append(site.text)
 
+    def _get_wiki_prom(self) -> None:
+        super()._get_wiki_prom()
 
-    # def _get_steel_fabrication(self) -> None:
-    #     for i in super()._companies:
-    #         self._link = i
-    #         super()._get_html()
+        for i, k in enumerate(self._companies, start=1):
+            self._link = k
+            super()._get_html()
+
+            self.info[i] = [self.soup.find("h1").text]
+
+            site = self.soup.find("a", attrs={"target": "_blank"})
+            if site != None:
+                self.info[i].append(site["href"])
 
 
-headers_kemcsm = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"}
-exam = CompaniesInfo("https://kemcsm.ru/factories/mashinostroitelnye-zavody", pages=14, headers=headers_kemcsm)
-exam._get_kemcsm()
+# headers_kemcsm = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"}
+exam = CompaniesInfo("https://www.wiki-prom.ru/169/mashinostroitelnye-zavody.html", pages=3)
+exam._get_wiki_prom()
 
 for i, k in exam.info.items():
     print(f"{i} - {k}")
