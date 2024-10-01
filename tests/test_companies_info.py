@@ -1,5 +1,5 @@
 import unittest
-from companies_info import CompaniesInfo
+from src.companies_info import CompaniesInfo
 
 class TestCompanies(unittest.TestCase):
     def setUp(self):

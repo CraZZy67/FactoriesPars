@@ -1,6 +1,6 @@
 import pandas as pd
 
-from companies_info import CompaniesInfo
+from src.companies_info import CompaniesInfo
 
 import re
 import json

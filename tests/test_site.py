@@ -1,5 +1,5 @@
 import unittest
-from site_links import Site
+from src.site_links import Site
 
 class TestCompanies(unittest.TestCase):
     def setUp(self):

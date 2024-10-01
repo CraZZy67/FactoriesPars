@@ -1,4 +1,4 @@
-from site_links import Site
+from src.site_links import Site
 
 from time import sleep
 
