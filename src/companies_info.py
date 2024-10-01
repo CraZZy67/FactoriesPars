@@ -1,4 +1,5 @@
 from src.site_links import Site
+from src.loggers import main_logger
 
 from time import sleep
 
@@ -27,6 +28,7 @@ class CompaniesInfo(Site):
                         self._info[i].append(v.text[9:])
                     elif "Сайт:" in v.text:
                         self._info[i].append(v.text[6:])
+            main_logger.info(f"Собрано {i} данных о компаниях (steel fabrication)")
                     
     def _get_metalweb(self) -> None:
         super()._get_metalweb()
@@ -46,6 +48,8 @@ class CompaniesInfo(Site):
                     self._info[i].append(phone["href"][4:])
                 if site != None:
                     self._info[i].append(site["href"])
+            main_logger.info(f"Собрано {i} данных о компаниях (metalweb)")
+
             if i > 100:
                 break
                
@@ -68,6 +72,7 @@ class CompaniesInfo(Site):
                         self._info[i].insert(1, v["href"][4:])
                     elif "http" in v["href"]:
                         self._info[i].append(v["href"])
+            main_logger.info(f"Собрано {i} данных о компаниях (fabricators)")
             if i > 100:
                 break
     
@@ -89,6 +94,8 @@ class CompaniesInfo(Site):
                 site_list = aside.find("ul", class_="c-site-list")
                 if site_list != None:
                     self._info[i].append(site_list.find("a")["href"])
+            main_logger.info(f"Собрано {i} данных о компаниях (oborudunion)")
+
             if i > 100:
                 break
             sleep(0.2)
@@ -111,6 +118,8 @@ class CompaniesInfo(Site):
                         self._info[i].insert(1, v["href"][4:])
                     elif "http" in v["href"]:
                         self._info[i].append(v["href"])
+            main_logger.info(f"Собрано {i} данных о компаниях (manufacturers)")
+
             if i > 100:
                 break
             sleep(0.2)
@@ -136,6 +145,7 @@ class CompaniesInfo(Site):
                     site = div_inf.find("a", class_="nofol-link")
                     if site != None:
                         self._info[i].append(site["href"])
+            main_logger.info(f"Собрано {i} данных о компаниях (orgpage)")
   
     def _get_checko(self) -> None:
         super()._get_checko()
@@ -158,6 +168,7 @@ class CompaniesInfo(Site):
                     a_link = main_div.find("a", attrs={"rel": "nofollow noopener"})
                     if a_link != None:
                         self._info[i].append(a_link["href"])
+            main_logger.info(f"Собрано {i} данных о компаниях (checko)")
 
     def _get_kemcsm(self)-> None:
         super()._get_kemcsm()
@@ -178,6 +189,7 @@ class CompaniesInfo(Site):
                 site = self.soup.find("a", attrs={"target": "_blank"})
                 if site != None:
                     self._info[i].append(site.text)
+            main_logger.info(f"Собрано {i} данных о компаниях (kemcsm)")
 
     def _get_wiki_prom(self) -> None:
         super()._get_wiki_prom()
@@ -192,6 +204,7 @@ class CompaniesInfo(Site):
                 site = self.soup.find("a", attrs={"target": "_blank"})
                 if site != None:
                     self._info[i].append(site["href"])
+            main_logger.info(f"Собрано {i} данных о компаниях (wiki_prom)")
     
     def get_info(self) -> dict:
         PATHS = {

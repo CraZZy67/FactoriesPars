@@ -1,9 +1,9 @@
 import pandas as pd
 
+from src.loggers import main_logger
 from src.companies_info import CompaniesInfo
 
 import re
-import json
 
 class Parser:
 
@@ -30,6 +30,7 @@ class Parser:
                     data["name"].append(filtered_data[0])
                     data["number"].append(filtered_data[1])
                     data["web_site"].append(filtered_data[2])
+                main_logger.info(f"Запись в excel файл данных ({v})")
 
         new_data_frame = pd.DataFrame(data)
         with pd.ExcelWriter("data/data_companies.xlsx", mode='a', engine='openpyxl', if_sheet_exists="overlay") as writer:
@@ -90,10 +91,9 @@ class Parser:
             if data[1] != None:
                 if data[1] == i:
                    return True
-                 
+        
         for i in data_frame["web_site"]:
             if data[2] != None:
                 if data[2] == i:
-                   return True
-                
+                   return True 
         return False

@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
+from src.loggers import main_logger
+
 import re
 from time import sleep
 
@@ -39,6 +41,7 @@ class Site:
             self._link = self._link.replace(re.search(pattern=r"PAGEN_6=\d+$",
                                                       string=self._link).group(0), f"PAGEN_6={i}")
             self._get_html()
+            main_logger.info(f"Собрано {i - 1} ссылок на профили (steel fabrication)")
 
     def _get_metalweb(self) -> None:
         for i in range(2, self._pages + 2):
@@ -52,6 +55,7 @@ class Site:
             self._link = self._link.replace(re.search(pattern=r"page.*",
                                                       string=self._link).group(0), f"page{i}.html")
             self._get_html()
+            main_logger.info(f"Собрано {i - 1} ссылок на профили (metalweb)")
         
     def _get_fabricators(self) -> None:
         for i in range(1, self._pages + 2):
@@ -68,6 +72,7 @@ class Site:
                 self._link = self._link.replace(re.search(pattern=r"page=\d+$",
                                                           string=self._link).group(0), f"page={i}")
             self._get_html()
+            main_logger.info(f"Собрано {i} ссылок на профили (fabricators)")
             sleep(0.2)
             
     
@@ -84,6 +89,7 @@ class Site:
             self._link = self._link.replace(re.search(pattern=r"PAGEN_1=\d+$",
                                                       string=self._link).group(0), f"PAGEN_1={i}")
             self._get_html()
+            main_logger.info(f"Собрано {i - 1} ссылок на профили (oborudunion)")
             sleep(0.2)
     
     def _get_manufacturers(self) -> None:
@@ -100,6 +106,7 @@ class Site:
                 self._link = self._link.replace(re.search(pattern=r"page=\d+$",
                                                           string=self._link).group(0), f"page={i}") 
             self._get_html()
+            main_logger.info(f"Собрано {i} ссылок на профили (manufacturers)")
             sleep(0.2)
 
     def _get_orgpage(self) -> None:
@@ -116,6 +123,7 @@ class Site:
                 self._link = self._link.replace(re.search(pattern=r"\d+\/$",
                                                           string=self._link).group(0), f"{i}/") 
             self._get_html()
+            main_logger.info(f"Собрано {i} ссылок на профили (orgpage)")
             
     def _get_checko(self) -> None:
         for i in range(2, self._pages + 2):
@@ -128,6 +136,7 @@ class Site:
             self._link = self._link.replace(re.search(pattern=r"page=\d+$",
                                                       string=self._link).group(0), f"page={i}")
             self._get_html()
+            main_logger.info(f"Собрано {i - 1} ссылок на профили (checko)")
     
     def _get_kemcsm(self)-> None:
         for i in range(1, self._pages + 2):
@@ -143,6 +152,7 @@ class Site:
                 self._link = self._link.replace(re.search(pattern=r"page=\d+$",
                                                           string=self._link).group(0), f"page={i}")
             self._get_html()
+            main_logger.info(f"Собрано {i} ссылок на профили (kemcsm)")
 
     def _get_wiki_prom(self) -> None:
         for i in range(2, self._pages + 2):
@@ -158,6 +168,7 @@ class Site:
                 self._link = self._link.replace(re.search(pattern=r"page\d+",
                                                           string=self._link).group(0), f"page{i}")
             self._get_html()
+            main_logger.info(f"Собрано {i - 1} ссылок на профили (wiki-prom)")
 
     def get_info(self) -> list:
         PATHS = {
