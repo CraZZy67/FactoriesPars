@@ -12,4 +12,6 @@ if __name__ == "__main__":
     parsing_companies.get_excel("topic_2", sheet="Energy")
     parsing_companies.get_excel("topic_3", sheet="Mashin")
 
-    main_logger.info("Программа успешно выполнена! В папке 'data' файл excel с данными.")
+    main_logger.info("\n\nПрограмма успешно выполнена! В папке 'data' файл excel с данными.")
+
+    cancel = input()

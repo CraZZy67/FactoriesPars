@@ -23,7 +23,7 @@ class Parser:
                     data = {"name": [filtered_data[0]], "number": [filtered_data[1]], "web_site": [filtered_data[2]]}
                     existing_data = pd.DataFrame(data)
                 
-                    with pd.ExcelWriter("data/data_companies.xlsx", mode='w', engine='openpyxl') as writer:
+                    with pd.ExcelWriter("data/data_companies.xlsx", mode='a', engine='openpyxl') as writer:
                         existing_data.to_excel(writer, sheet_name=sheet, index=False)
                 
                 elif not self.check_repeat(data=filtered_data, data_frame=data):
