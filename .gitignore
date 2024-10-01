@@ -304,5 +304,6 @@ pip-selfcheck.json
 logs.log
 index.html
 .vscode/
+data_companies.xlsx
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv,dotenv

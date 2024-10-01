@@ -1,4 +1,4 @@
-from site_cls import Site
+from site_links import Site
 
 from time import sleep
 
