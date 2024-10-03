@@ -51,7 +51,7 @@ class CompaniesInfo(Site):
                 if site != None:
                     self._info[i].append(site["href"])
             main_logger.info(f"Собрано {i} данных о компаниях (metalweb)")
-            if i > 700:
+            if i > 100:
                 break
                
     def _get_fabricators(self) -> None:
