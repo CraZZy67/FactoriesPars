@@ -2,6 +2,7 @@ from src.site_links import Site
 from src.loggers import main_logger
 
 from time import sleep
+from requests.exceptions import ConnectionError
 
 
 class CompaniesInfo(Site):
@@ -16,7 +17,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 main_div = self.soup.find("div", class_="right-p")
@@ -37,7 +42,11 @@ class CompaniesInfo(Site):
         
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 self._info[i] = [self.soup.find("h1").text]
@@ -59,7 +68,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 self._info[i] = [self.soup.find("h1").text]
@@ -84,7 +97,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 aside = self.soup.find("aside")
@@ -113,7 +130,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 self._info[i] = [self.soup.find("h1").text]
@@ -139,7 +160,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 self._info[i] = [self.soup.find("h1").text.replace(" ", "").replace("\n", "")]
@@ -166,7 +191,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 self._info[i] = [self.soup.find("h1").text]
@@ -196,7 +225,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 self._info[i] = [self.soup.find("h1").text]
@@ -219,7 +252,11 @@ class CompaniesInfo(Site):
 
         for i, k in enumerate(self._companies, start=1):
             self._link = k
-            super()._get_html()
+            try:
+                super()._get_html()
+            except ConnectionError:
+                main_logger.error("Ссылка была пропущенна из за разрыва соединения от сайта.")
+                continue
 
             if self.soup != "error":
                 self._info[i] = [self.soup.find("h1").text]
