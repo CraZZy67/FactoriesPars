@@ -27,7 +27,9 @@ class CompaniesInfo(Site):
                     if "Телефон:" in v.text:
                         self._info[i].append(v.text[9:])
                     elif "Сайт:" in v.text:
-                        self._info[i].append(v.text[6:])
+                        self._info[i].append(v.find("a")["href"])
+                    elif "Эл. почта:" in v.text:
+                        self._info[i].append(v.find("a")["href"][7:])
             main_logger.info(f"Собрано {i} данных о компаниях (steel fabrication)")
                     
     def _get_metalweb(self) -> None:
@@ -49,8 +51,7 @@ class CompaniesInfo(Site):
                 if site != None:
                     self._info[i].append(site["href"])
             main_logger.info(f"Собрано {i} данных о компаниях (metalweb)")
-
-            if i > 100:
+            if i > 700:
                 break
                
     def _get_fabricators(self) -> None:
@@ -72,8 +73,10 @@ class CompaniesInfo(Site):
                         self._info[i].insert(1, v["href"][4:])
                     elif "http" in v["href"]:
                         self._info[i].append(v["href"])
+                    elif "mailto:" in v["href"]:
+                        self._info[i].append(v["href"][7:])
             main_logger.info(f"Собрано {i} данных о компаниях (fabricators)")
-            if i > 100:
+            if i > 700:
                 break
     
     def _get_oborudunion(self) -> None:
@@ -94,9 +97,14 @@ class CompaniesInfo(Site):
                 site_list = aside.find("ul", class_="c-site-list")
                 if site_list != None:
                     self._info[i].append(site_list.find("a")["href"])
+                
+                email_list = self.soup.find("ul", class_="email-list")
+                if email_list != None:
+                    lis = email_list.find_all("li")
+                    self._info[i].append(lis[1].find("a")["href"][7:])
             main_logger.info(f"Собрано {i} данных о компаниях (oborudunion)")
 
-            if i > 100:
+            if i > 700:
                 break
             sleep(0.2)
     
@@ -118,9 +126,11 @@ class CompaniesInfo(Site):
                         self._info[i].insert(1, v["href"][4:])
                     elif "http" in v["href"]:
                         self._info[i].append(v["href"])
+                    elif "mailto:" in v["href"]:
+                        self._info[i].append(v["href"][7:])
             main_logger.info(f"Собрано {i} данных о компаниях (manufacturers)")
 
-            if i > 100:
+            if i > 700:
                 break
             sleep(0.2)
     
@@ -143,8 +153,12 @@ class CompaniesInfo(Site):
                 div_inf = self.soup.find("div", class_="company-information__site-text")
                 if div_inf != None:
                     site = div_inf.find("a", class_="nofol-link")
+                    email = div_inf.find("a", attrs={"itemprop": "email"})
+
                     if site != None:
                         self._info[i].append(site["href"])
+                    if email != None:
+                        self._info[i].append(email["href"])
             main_logger.info(f"Собрано {i} данных о компаниях (orgpage)")
   
     def _get_checko(self) -> None:
@@ -168,6 +182,13 @@ class CompaniesInfo(Site):
                     a_link = main_div.find("a", attrs={"rel": "nofollow noopener"})
                     if a_link != None:
                         self._info[i].append(a_link["href"])
+                
+                all_div = main_div.find_all("div", class_="uk-width-1 uk-width-1-3@m")
+                if all_div != None and len(all_div) != 0:
+                    div_c = all_div[1].find("a", class_="link")
+                    if div_c != None:
+                        self._info[i].append(div_c["href"][7:])
+
             main_logger.info(f"Собрано {i} данных о компаниях (checko)")
 
     def _get_kemcsm(self)-> None:
@@ -181,10 +202,12 @@ class CompaniesInfo(Site):
                 self._info[i] = [self.soup.find("h1").text]
 
                 contact_company = self.soup.find("div", id="contact-company")
-                all_li = contact_company.find_all("li")
-                phone = all_li[1].find("a")
-                if phone != None:
-                    self._info[i].append(phone["href"][4:])
+                all_a = contact_company.find_all("a")
+                for v in all_a:
+                    if "tel:" in v["href"]:
+                        self._info[i].append(v["href"][4:])
+                    elif "mailto:" in v["href"]:
+                        self._info[i].append(v["href"][7:])
                 
                 site = self.soup.find("a", attrs={"target": "_blank"})
                 if site != None:

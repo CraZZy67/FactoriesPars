@@ -8,10 +8,14 @@ if __name__ == "__main__":
 
     main_logger.info("Начало выполнения программы!")
 
-    parsing_companies.get_excel("topic_1", sheet="Metal")
-    parsing_companies.get_excel("topic_2", sheet="Energy")
-    parsing_companies.get_excel("topic_3", sheet="Mashin")
+    try:
+        parsing_companies.get_excel("topic_1", sheet="Metal")
+        parsing_companies.get_excel("topic_2", sheet="Energy")
+        parsing_companies.get_excel("topic_3", sheet="Mashin")
 
-    main_logger.info("\n\nПрограмма успешно выполнена! В папке 'data' файл excel с данными.")
+        main_logger.info("\n\nПрограмма успешно выполнена! В папке 'data' файл excel с данными.")
+    except Exception as ex:
+        main_logger.error(f"Возникла ошибка: {ex}")
+        main_logger.info("\n\nУбедитесь что файл excel содержал только одну базовую страницу перед запуском программы и был пуст.")
 
     cancel = input()

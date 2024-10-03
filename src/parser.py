@@ -20,7 +20,7 @@ class Parser:
                 filtered_data = self.filtering_data(j)
 
                 if i == 0 and v == 0:
-                    data = {"name": [filtered_data[0]], "number": [filtered_data[1]], "web_site": [filtered_data[2]]}
+                    data = {"name": [filtered_data[0]], "number": [filtered_data[1]], "web_site": [filtered_data[2]], "mail": [filtered_data[3]]}
                     existing_data = pd.DataFrame(data)
                 
                     with pd.ExcelWriter("data/data_companies.xlsx", mode='a', engine='openpyxl') as writer:
@@ -30,6 +30,7 @@ class Parser:
                     data["name"].append(filtered_data[0])
                     data["number"].append(filtered_data[1])
                     data["web_site"].append(filtered_data[2])
+                    data["mail"].append(filtered_data[3])
                 main_logger.info(f"Запись в excel файл данных ({v})")
 
         new_data_frame = pd.DataFrame(data)
@@ -46,38 +47,44 @@ class Parser:
 
         filtered_data_two.append(data[0])
 
-        if len(data) == 3:
-            filtered_data_two.append(filtered_data_one[0])
-            filtered_data_two.append(filtered_data_one[1])
-            return filtered_data_two
+        for k in filtered_data_one:
+            if re.search(pattern=r"^\+?\d?\(?\d+", string=k) != None:
+                filtered_data_two.append(k)
+                break
 
-        if len(data) > 3:
-            for k in filtered_data_one:
-                if re.search(pattern=r"^\+?\d?\(?\d+", string=k) != None:
-                    filtered_data_two.append(k)
-                    break
+        for k in filtered_data_one:
+            if re.search(pattern=r"^[a-zA-Z]+", string=k) != None and "@" not in k:
+                filtered_data_two.append(k)
+                break
 
-            for k in filtered_data_one:
-                if re.search(pattern=r"^\+?\d?\(?\d+", string=k) == None:
-                    filtered_data_two.append(k)
-                    break 
-            
-            if len(filtered_data_two) == 2:
-                if "http" in filtered_data_two[1]:
-                    filtered_data_two.insert(1, "None")
-                else:
-                    filtered_data_two.insert(2, "None")
+        for k in filtered_data_one:
+            if "@" in k:
+                filtered_data_two.append(k)
+                break
 
-        elif len(data) == 2:
-            if "http" in filtered_data_one[0]:
-                filtered_data_two.append("None")
-                filtered_data_two.append(filtered_data_one[0])
+        if len(filtered_data_two) == 2:
+            if "http" in filtered_data_two[1]:
+                filtered_data_two.insert(1, "None")
+                filtered_data_two.insert(3, "None")
+            elif "@" in filtered_data_two[1]:
+                filtered_data_two.insert(1, "None")
+                filtered_data_two.insert(2, "None")
             else:
-                filtered_data_two.append(filtered_data_one[0])
-                filtered_data_two.append("None")
-        else:
-            filtered_data_two.append("None")
-            filtered_data_two.append("None")
+                filtered_data_two.insert(2, "None")
+                filtered_data_two.insert(3, "None")
+
+        elif len(filtered_data_two) == 3:
+            if "http" in filtered_data_two[1]:
+                filtered_data_two.insert(1, "None")
+            elif "@" in filtered_data_two[2]:
+                filtered_data_two.insert(2, "None")
+            else:
+                filtered_data_two.insert(3, "None")
+
+        elif len(filtered_data_two) == 1:
+            filtered_data_two.insert(1, "None")
+            filtered_data_two.insert(2, "None")
+            filtered_data_two.insert(3, "None")
                 
         return filtered_data_two
         
