@@ -75,7 +75,12 @@ class CompaniesInfo(Site):
                 continue
 
             if self.soup != "error":
-                self._info[i] = [self.soup.find("h1").text]
+                head = self.soup.find("h1")
+                
+                if head != None:
+                    self._info[i] = [head.text]
+                else:
+                    continue
 
                 section = self.soup.find("div", id="section-st-block5")
                 contact_list = section.find("div", class_="content-contact-list")
