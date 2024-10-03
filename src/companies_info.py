@@ -1,7 +1,6 @@
 from src.site_links import Site
 from src.loggers import main_logger
 
-from time import sleep
 from requests.exceptions import ConnectionError
 
 
@@ -60,8 +59,6 @@ class CompaniesInfo(Site):
                 if site != None:
                     self._info[i].append(site["href"])
             main_logger.info(f"Собрано {i} данных о компаниях (metalweb)")
-            if i > 100:
-                break
                
     def _get_fabricators(self) -> None:
         super()._get_fabricators()
@@ -94,8 +91,6 @@ class CompaniesInfo(Site):
                     elif "mailto:" in v["href"]:
                         self._info[i].append(v["href"][7:])
             main_logger.info(f"Собрано {i} данных о компаниях (fabricators)")
-            if i > 700:
-                break
     
     def _get_oborudunion(self) -> None:
         super()._get_oborudunion()
@@ -125,10 +120,6 @@ class CompaniesInfo(Site):
                     lis = email_list.find_all("li")
                     self._info[i].append(lis[1].find("a")["href"][7:])
             main_logger.info(f"Собрано {i} данных о компаниях (oborudunion)")
-
-            if i > 700:
-                break
-            sleep(0.2)
     
     def _get_manufacturers(self) -> None:
         super()._get_manufacturers()
@@ -155,10 +146,6 @@ class CompaniesInfo(Site):
                     elif "mailto:" in v["href"]:
                         self._info[i].append(v["href"][7:])
             main_logger.info(f"Собрано {i} данных о компаниях (manufacturers)")
-
-            if i > 700:
-                break
-            sleep(0.2)
     
     def _get_orgpage(self) -> None:
         super()._get_orgpage()
